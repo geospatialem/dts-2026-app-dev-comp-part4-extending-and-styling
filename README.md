@@ -1,5 +1,5 @@
 # ArcGIS Maps SDK for JavaScript: App Development with Components, Part 4: Extending and Styling
-Presented at the 2026 Esri Developer Summit by Kitty Hurley and Rene Rubalcava in Palm Springs, California.
+Presented at the 2026 Esri Developer Summit by [Kitty Hurley](https://github.com/geospatialem) and [Rene Rubalcava](https://github.com/odoe) in Palm Springs, California.
 
 - [Demo Site](https://geospatialem.github.io/dts-2026-app-dev-comp-part4-extending-and-styling)
 - [Code](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling)

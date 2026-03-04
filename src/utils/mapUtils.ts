@@ -328,6 +328,144 @@ function ensureGraphNode(
   }
 }
 
+type Segment2D = {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+};
+
+type SegmentSplitPoint = { t: number; x: number; y: number };
+
+function segmentBBox(seg: Segment2D): {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+} {
+  return {
+    minX: Math.min(seg.x1, seg.x2),
+    minY: Math.min(seg.y1, seg.y2),
+    maxX: Math.max(seg.x1, seg.x2),
+    maxY: Math.max(seg.y1, seg.y2),
+  };
+}
+
+function gridKey(ix: number, iy: number): string {
+  return `${ix}|${iy}`;
+}
+
+function parseQuantizedKey(key: string): { qx: number; qy: number } | null {
+  const [sx, sy] = key.split('|');
+  const qx = Number(sx);
+  const qy = Number(sy);
+  if (!Number.isFinite(qx) || !Number.isFinite(qy)) {
+    return null;
+  }
+  return { qx, qy };
+}
+
+function addNearMissEdges(graph: TrailGraph, toleranceMeters: number): void {
+  // quantizeKey() uses rounding; two points can be < tolerance apart but land
+  // in adjacent bins near the rounding boundary. This pass adds short edges
+  // to bridge those cases.
+  const keys = [...graph.nodes.keys()];
+
+  const neighborOffsets = [-1, 0, 1];
+
+  keys.forEach((key) => {
+    const q = parseQuantizedKey(key);
+    const node = graph.nodes.get(key);
+    if (!q || !node) {
+      return;
+    }
+
+    neighborOffsets.forEach((dx) => {
+      neighborOffsets.forEach((dy) => {
+        if (dx === 0 && dy === 0) {
+          return;
+        }
+        const neighborKey = gridKey(q.qx + dx, q.qy + dy);
+        if (!graph.nodes.has(neighborKey)) {
+          return;
+        }
+        const neighbor = graph.nodes.get(neighborKey);
+        if (!neighbor) {
+          return;
+        }
+        const dist = Math.hypot(neighbor.x - node.x, neighbor.y - node.y);
+        if (dist > 0 && dist <= toleranceMeters) {
+          addGraphEdge(graph, key, neighborKey, dist);
+          addGraphEdge(graph, neighborKey, key, dist);
+        }
+      });
+    });
+  });
+}
+
+function cellsForBBox(
+  bbox: { minX: number; minY: number; maxX: number; maxY: number },
+  cellSizeMeters: number,
+): string[] {
+  const minIx = Math.floor(bbox.minX / cellSizeMeters);
+  const maxIx = Math.floor(bbox.maxX / cellSizeMeters);
+  const minIy = Math.floor(bbox.minY / cellSizeMeters);
+  const maxIy = Math.floor(bbox.maxY / cellSizeMeters);
+
+  const keys: string[] = [];
+  for (let ix = minIx; ix <= maxIx; ix += 1) {
+    for (let iy = minIy; iy <= maxIy; iy += 1) {
+      keys.push(gridKey(ix, iy));
+    }
+  }
+  return keys;
+}
+
+function cross2(ax: number, ay: number, bx: number, by: number): number {
+  return ax * by - ay * bx;
+}
+
+function segmentIntersection(
+  a: Segment2D,
+  b: Segment2D,
+  epsilon = 1e-9,
+): { x: number; y: number; tA: number; tB: number } | null {
+  const rX = a.x2 - a.x1;
+  const rY = a.y2 - a.y1;
+  const sX = b.x2 - b.x1;
+  const sY = b.y2 - b.y1;
+
+  const denom = cross2(rX, rY, sX, sY);
+  const qpx = b.x1 - a.x1;
+  const qpy = b.y1 - a.y1;
+
+  // Parallel or colinear
+  if (Math.abs(denom) < epsilon) {
+    // Colinear overlaps are not split here; endpoint quantization handles most shared-vertex cases.
+    return null;
+  }
+
+  const t = cross2(qpx, qpy, sX, sY) / denom;
+  const u = cross2(qpx, qpy, rX, rY) / denom;
+
+  // Allow a tiny tolerance so endpoint hits aren't missed.
+  const min = -1e-10;
+  const max = 1 + 1e-10;
+  if (t < min || t > max || u < min || u > max) {
+    return null;
+  }
+
+  const tClamped = Math.max(0, Math.min(1, t));
+  const uClamped = Math.max(0, Math.min(1, u));
+
+  return {
+    x: a.x1 + tClamped * rX,
+    y: a.y1 + tClamped * rY,
+    tA: tClamped,
+    tB: uClamped,
+  };
+}
+
 function buildTrailGraph(
   polylines: Polyline[],
   toleranceMeters: number,
@@ -337,12 +475,13 @@ function buildTrailGraph(
     adjacency: new Map(),
   };
 
+  // 1) Collect all segments from all polylines.
+  const segments: Segment2D[] = [];
   polylines.forEach((polyline) => {
     polyline.paths.forEach((path) => {
       for (let i = 0; i < path.length - 1; i += 1) {
         const [x1, y1] = path[i] ?? [];
         const [x2, y2] = path[i + 1] ?? [];
-
         if (
           typeof x1 !== 'number' ||
           typeof y1 !== 'number' ||
@@ -351,23 +490,171 @@ function buildTrailGraph(
         ) {
           continue;
         }
-
-        const aKey = quantizeKey(x1, y1, toleranceMeters);
-        const bKey = quantizeKey(x2, y2, toleranceMeters);
-
-        ensureGraphNode(graph, aKey, { x: x1, y: y1 });
-        ensureGraphNode(graph, bKey, { x: x2, y: y2 });
-
-        const lengthMeters = Math.hypot(x2 - x1, y2 - y1);
-        if (!Number.isFinite(lengthMeters) || lengthMeters <= 0) {
+        // Skip zero-length segments.
+        if (x1 === x2 && y1 === y2) {
           continue;
         }
-
-        addGraphEdge(graph, aKey, bKey, lengthMeters);
-        addGraphEdge(graph, bKey, aKey, lengthMeters);
+        segments.push({ x1, y1, x2, y2 });
       }
     });
   });
+
+  if (segments.length === 0) {
+    return graph;
+  }
+
+  // 2) Spatial index segments in a coarse grid to avoid O(n^2).
+  //    Cell size chosen to be large enough to reduce buckets, small enough to prune comparisons.
+  const cellSizeMeters = Math.max(250, toleranceMeters * 50);
+  const grid = new Map<string, number[]>();
+
+  segments.forEach((seg, index) => {
+    const bbox = segmentBBox(seg);
+    // Expand bbox by a small amount so near-border intersections aren't missed.
+    const expand = toleranceMeters;
+    const expanded = {
+      minX: bbox.minX - expand,
+      minY: bbox.minY - expand,
+      maxX: bbox.maxX + expand,
+      maxY: bbox.maxY + expand,
+    };
+
+    cellsForBBox(expanded, cellSizeMeters).forEach((key) => {
+      const list = grid.get(key) ?? [];
+      list.push(index);
+      grid.set(key, list);
+    });
+  });
+
+  // 3) For each segment, gather split points (endpoints + intersections).
+  const splitsBySegment = new Map<number, SegmentSplitPoint[]>();
+  const ensureSplits = (idx: number): SegmentSplitPoint[] => {
+    const existing = splitsBySegment.get(idx);
+    if (existing) {
+      return existing;
+    }
+    const seg = segments[idx];
+    const list: SegmentSplitPoint[] = [
+      { t: 0, x: seg.x1, y: seg.y1 },
+      { t: 1, x: seg.x2, y: seg.y2 },
+    ];
+    splitsBySegment.set(idx, list);
+    return list;
+  };
+
+  // Deduplicate segment pair checks.
+  const seenPair = new Set<string>();
+
+  segments.forEach((segA, i) => {
+    const bboxA = segmentBBox(segA);
+    const expandedA = {
+      minX: bboxA.minX - toleranceMeters,
+      minY: bboxA.minY - toleranceMeters,
+      maxX: bboxA.maxX + toleranceMeters,
+      maxY: bboxA.maxY + toleranceMeters,
+    };
+
+    const candidateIndices = new Set<number>();
+    cellsForBBox(expandedA, cellSizeMeters).forEach((key) => {
+      const list = grid.get(key);
+      if (!list) {
+        return;
+      }
+      list.forEach((j) => {
+        if (j !== i) {
+          candidateIndices.add(j);
+        }
+      });
+    });
+
+    candidateIndices.forEach((j) => {
+      const a = Math.min(i, j);
+      const b = Math.max(i, j);
+      const pairKey = `${a}:${b}`;
+      if (seenPair.has(pairKey)) {
+        return;
+      }
+      seenPair.add(pairKey);
+
+      const segB = segments[j];
+
+      // Quick bbox reject.
+      const bboxB = segmentBBox(segB);
+      if (
+        expandedA.maxX < bboxB.minX ||
+        expandedA.minX > bboxB.maxX ||
+        expandedA.maxY < bboxB.minY ||
+        expandedA.minY > bboxB.maxY
+      ) {
+        return;
+      }
+
+      const intersection = segmentIntersection(segA, segB);
+      if (!intersection) {
+        return;
+      }
+
+      ensureSplits(i).push({
+        t: intersection.tA,
+        x: intersection.x,
+        y: intersection.y,
+      });
+      ensureSplits(j).push({
+        t: intersection.tB,
+        x: intersection.x,
+        y: intersection.y,
+      });
+    });
+  });
+
+  const uniqueSortSplits = (
+    splits: SegmentSplitPoint[],
+  ): SegmentSplitPoint[] => {
+    const sorted = [...splits].sort((a, b) => a.t - b.t);
+    const out: SegmentSplitPoint[] = [];
+    let lastKey: string | null = null;
+
+    sorted.forEach((p) => {
+      const key = quantizeKey(p.x, p.y, toleranceMeters);
+      if (key === lastKey) {
+        return;
+      }
+      lastKey = key;
+      out.push(p);
+    });
+
+    return out;
+  };
+
+  // 4) Convert each segment's split points into graph edges.
+  for (let i = 0; i < segments.length; i += 1) {
+    const splits = uniqueSortSplits(ensureSplits(i));
+    for (let k = 0; k < splits.length - 1; k += 1) {
+      const a = splits[k];
+      const b = splits[k + 1];
+
+      const aKey = quantizeKey(a.x, a.y, toleranceMeters);
+      const bKey = quantizeKey(b.x, b.y, toleranceMeters);
+
+      if (aKey === bKey) {
+        continue;
+      }
+
+      ensureGraphNode(graph, aKey, { x: a.x, y: a.y });
+      ensureGraphNode(graph, bKey, { x: b.x, y: b.y });
+
+      const lengthMeters = Math.hypot(b.x - a.x, b.y - a.y);
+      if (!Number.isFinite(lengthMeters) || lengthMeters <= 0) {
+        continue;
+      }
+
+      addGraphEdge(graph, aKey, bKey, lengthMeters);
+      addGraphEdge(graph, bKey, aKey, lengthMeters);
+    }
+  }
+
+  // 5) Bridge near-miss nodes across quantization boundaries.
+  addNearMissEdges(graph, toleranceMeters);
 
   return graph;
 }

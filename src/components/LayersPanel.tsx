@@ -4,6 +4,7 @@ import '@esri/calcite-components/components/calcite-list-item';
 import '@esri/calcite-components/components/calcite-notice';
 import '@esri/calcite-components/components/calcite-block';
 import '@esri/calcite-components/components/calcite-slider';
+import '@esri/calcite-components/components/calcite-label';
 
 import { getLayerColor } from '../utils/mapUtils';
 import { useLayersActions, useLayersState } from '../context/LayersContext';

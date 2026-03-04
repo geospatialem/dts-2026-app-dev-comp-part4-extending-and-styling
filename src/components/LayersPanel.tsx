@@ -5,35 +5,22 @@ import '@esri/calcite-components/components/calcite-notice';
 import '@esri/calcite-components/components/calcite-block';
 import '@esri/calcite-components/components/calcite-slider';
 
-import type FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-
 import { getLayerColor } from '../utils/mapUtils';
+import { useLayersActions, useLayersState } from '../context/LayersContext';
 
-interface LayersPanelProps {
-  fireYears: number[];
-  activeFireYears: number[];
-  onFireYearSelect: (event: CustomEvent) => void;
-  perimeterLayers?: FeatureLayer[];
-  roadAndTrailLayers: FeatureLayer[];
-  activeRoadTrailLayerIds: string[];
-  onRoadTrailSelect: (event: CustomEvent) => void;
-}
-
-export function LayersPanel(props: LayersPanelProps): React.JSX.Element {
+export function LayersPanel(): React.JSX.Element {
   const {
     fireYears,
     activeFireYears,
-    onFireYearSelect,
     perimeterLayers,
     roadAndTrailLayers,
     activeRoadTrailLayerIds,
-    onRoadTrailSelect,
-  } = props;
+  } = useLayersState();
+  const { handleFireYearSelection, handleRoadTrailSelection } =
+    useLayersActions();
 
   const perimeterColor =
-    perimeterLayers && perimeterLayers.length > 0
-      ? getLayerColor(perimeterLayers[0])
-      : undefined;
+    perimeterLayers.length > 0 ? getLayerColor(perimeterLayers[0]) : undefined;
 
   return (
     <calcite-panel heading="Will I Find Morels? " className="panel-layers">
@@ -59,7 +46,7 @@ export function LayersPanel(props: LayersPanelProps): React.JSX.Element {
                 scale="s"
                 value={year}
                 selected={isSelected}
-                oncalciteListItemSelect={onFireYearSelect}
+                oncalciteListItemSelect={handleFireYearSelection}
               >
                 {/* todo perform filter here not hide show like roads - based on FIREYEAR */}
                 {/* todo - need to source this color differently - its all one layer, roads work as they are different layers */}
@@ -110,7 +97,7 @@ export function LayersPanel(props: LayersPanelProps): React.JSX.Element {
                 scale="s"
                 value={layer.id}
                 selected={activeRoadTrailLayerIds.includes(layer.id)}
-                oncalciteListItemSelect={onRoadTrailSelect}
+                oncalciteListItemSelect={handleRoadTrailSelection}
               >
                 {getLayerColor(layer) && (
                   <div

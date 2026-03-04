@@ -4,37 +4,26 @@ import '@esri/calcite-components/components/calcite-tile';
 import '@esri/calcite-components/components/calcite-tile-group';
 import '@esri/calcite-components/components/calcite-meter';
 
-interface MorelPanelProps {
-  burnStatusLabel: string;
-  burnStatusValue: number;
-  burnDetail: string;
-  elevationValue: number | null;
-  suitabilityLabel: string;
-  suitabilityValue: number;
-  accessDetail: string;
-  locationLabel: string;
-  isSmallScreen: boolean;
-}
+import { useResultsState } from '../context/ResultsContext';
 
-export function MorelPanel(props: MorelPanelProps): React.JSX.Element {
+export function MorelPanel(): React.JSX.Element {
   const {
     burnStatusLabel,
     burnStatusValue,
     burnDetail,
     elevationValue,
-    suitabilityLabel,
-    suitabilityValue,
+    accessLabel,
     accessDetail,
+    accessValue,
     locationLabel,
-  } = props;
+  } = useResultsState();
 
   return (
     <calcite-tile-group
       label="Morel probability tiles"
-      layout={'vertical'}
+      layout="vertical"
       selection-mode="none"
       scale="s"
-      slot="top-right"
     >
       <calcite-tile
         icon="pin"
@@ -89,16 +78,16 @@ export function MorelPanel(props: MorelPanelProps): React.JSX.Element {
       </calcite-tile>
       <calcite-tile icon="walking" description={accessDetail} heading="Access">
         <div className="big-number" slot="content-top">
-          {suitabilityLabel}
+          {accessLabel}
         </div>
         {/* todo this meter is backwards - maybe part 4 can theme this with tokens for meaning */}
         <calcite-meter
           scale="s"
           slot="content-top"
-          label="Access suitability"
+          label="Access (distance)"
           min={0}
           max={100}
-          value={suitabilityValue}
+          value={accessValue}
         ></calcite-meter>
       </calcite-tile>
     </calcite-tile-group>

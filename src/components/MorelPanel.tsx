@@ -62,7 +62,7 @@ export function MorelPanel(): React.JSX.Element {
         icon="altitude"
         heading="Elevation"
       >
-        <div className="big-number " slot="content-top">
+        <div className="big-number" slot="content-top">
           {elevationValue !== null
             ? `${Math.round(elevationValue)} m`
             : 'Tap map'}

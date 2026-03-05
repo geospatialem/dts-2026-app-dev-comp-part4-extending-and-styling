@@ -6,6 +6,19 @@ Presented at the 2026 Esri Developer Summit by [Kitty Hurley](https://github.com
 - [Code](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling)
 - _Slides, will be posted at a later time_
 
+## Get started
+
+- `npm run dev` - Runs the app in development mode.
+- `npm run build` - Builds the app for production to the `build` folder.
+- `npm run preview` - Builds the app and serves it locally for testing.
+
+This template uses the following packages:
+
+- [`@arcgis/core`](https://www.npmjs.com/package/@arcgis/core)
+- [`@arcgis/map-components`](https://www.npmjs.com/package/@arcgis/map-components)
+- [`@arcgis/charts-components`](https://www.npmjs.com/package/@arcgis/charts-components)
+- [`@esri/calcite-components`](https://www.npmjs.com/package/@esri/calcite-components)
+
 ## Demos
 
 _Coming soon_

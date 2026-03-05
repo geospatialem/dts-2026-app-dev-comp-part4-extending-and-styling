@@ -5,6 +5,12 @@ import '@esri/calcite-components/components/calcite-tile-group';
 import '@esri/calcite-components/components/calcite-meter';
 
 import { useResultsState } from '../context/ResultsContext';
+import { MorelTile } from './MorelTile';
+import type { MorelTileProps } from './MorelTile';
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
 
 export function MorelPanel(): React.JSX.Element {
   const {
@@ -18,6 +24,61 @@ export function MorelPanel(): React.JSX.Element {
     locationLabel,
   } = useResultsState();
 
+  const resultsTiles: (MorelTileProps & { key: string })[] = [
+    {
+      key: 'location',
+      icon: 'pin',
+      description: 'Latitude and longitude of last map click.',
+      heading: 'Location',
+      bigNumber: locationLabel,
+    },
+    {
+      key: 'burn',
+      icon: 'drive-time',
+      description: burnDetail,
+      heading: 'Recent Wildfire',
+      bigNumber: burnStatusLabel,
+      meter: {
+        label: 'Burn status',
+        min: 0,
+        max: 100,
+        value: burnStatusValue,
+        className: 'big-number',
+      },
+    },
+    {
+      key: 'elevation',
+      className: 'danger',
+      icon: 'altitude',
+      description:
+        elevationValue !== null
+          ? 'Elevation at clicked location.'
+          : 'Click the map to see elevation.',
+      heading: 'Elevation',
+      bigNumber:
+        elevationValue !== null ? `${Math.round(elevationValue)} m` : 'Tap map',
+      meter: {
+        label: 'Elevation',
+        min: 0,
+        max: 4000,
+        value: elevationValue !== null ? clamp(elevationValue, 0, 4000) : null,
+      },
+    },
+    {
+      key: 'access',
+      icon: 'walking',
+      description: accessDetail,
+      heading: 'Access',
+      bigNumber: accessLabel,
+      meter: {
+        label: 'Access (distance)',
+        min: 0,
+        max: 100,
+        value: accessValue,
+      },
+    },
+  ];
+
   return (
     <calcite-tile-group
       label="Morel probability tiles"
@@ -25,71 +86,9 @@ export function MorelPanel(): React.JSX.Element {
       selection-mode="none"
       scale="s"
     >
-      <calcite-tile
-        icon="pin"
-        description="Latitude and longitude of last map click."
-        heading="Location"
-      >
-        <div className="big-number" slot="content-top">
-          {locationLabel}
-        </div>
-      </calcite-tile>
-      <calcite-tile
-        icon="drive-time"
-        description={burnDetail}
-        heading="Recent Wildfire"
-      >
-        <div className="big-number" slot="content-top">
-          {burnStatusLabel}
-        </div>
-        <calcite-meter
-          scale="s"
-          className="big-number"
-          slot="content-top"
-          label="Burn status"
-          min={0}
-          max={100}
-          value={burnStatusValue}
-        ></calcite-meter>
-      </calcite-tile>
-      <calcite-tile
-        className="danger"
-        description={
-          elevationValue !== null
-            ? 'Elevation at clicked location.'
-            : 'Click the map to see elevation.'
-        }
-        icon="altitude"
-        heading="Elevation"
-      >
-        <div className="big-number " slot="content-top">
-          {elevationValue !== null
-            ? `${Math.round(elevationValue)} m`
-            : 'Tap map'}
-        </div>
-        <calcite-meter
-          scale="s"
-          slot="content-top"
-          label="Elevation"
-          min={0}
-          max={4000}
-          value={Math.min(Math.max(elevationValue ?? 0, 0), 4000)}
-        ></calcite-meter>
-      </calcite-tile>
-      <calcite-tile icon="walking" description={accessDetail} heading="Access">
-        <div className="big-number" slot="content-top">
-          {accessLabel}
-        </div>
-        {/* todo this meter is backwards - maybe part 4 can theme this with tokens for meaning */}
-        <calcite-meter
-          scale="s"
-          slot="content-top"
-          label="Access (distance)"
-          min={0}
-          max={100}
-          value={accessValue}
-        ></calcite-meter>
-      </calcite-tile>
+      {resultsTiles.map(({ key, ...tileProps }) => (
+        <MorelTile key={key} {...tileProps} />
+      ))}
     </calcite-tile-group>
   );
 }

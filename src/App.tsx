@@ -10,23 +10,32 @@ import "@esri/calcite-components/components/calcite-sheet";
 import "@esri/calcite-components/components/calcite-shell";
 import "@esri/calcite-components/components/calcite-switch";
 
-import { useLayersActions } from "./context/LayersContext";
+import { useLayersActions, useLayersState } from "./context/LayersContext";
 import { useResultsActions } from "./context/ResultsContext";
 import { useThemeActions, useThemeState } from "./context/ThemeContext";
 import { useUIActions, useUIState } from "./context/UIContext";
 
 import { LayersPanel } from "./components/LayersPanel";
 import { MorelPanel } from "./components/MorelPanel";
+import { useEffect } from "react";
 
 const mapItemId = "ecaf67baea484e99b1b499131ae8e179";
 
 export function App(): React.JSX.Element {
-  const { handleViewReady } = useLayersActions();
+  const { handleViewReady, toggleBackgroundLayer } = useLayersActions();
+  const { map } = useLayersState();
   const { handleMapClick } = useResultsActions();
   const { isSmallScreen, isFiltersSheetOpen } = useUIState();
   const { openFilters, closeFilters } = useUIActions();
   const { mode } = useThemeState();
   const { toggleTheme } = useThemeActions();
+
+  useEffect(() => {
+    // Set the initial background layer based on the theme mode when the app loads
+    if (map) {
+      toggleBackgroundLayer(mode);
+    }
+  }, [map, mode, toggleBackgroundLayer]);
 
   return (
     // The Shell component is used as a layout for this template

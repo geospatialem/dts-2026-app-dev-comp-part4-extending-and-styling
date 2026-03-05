@@ -181,6 +181,9 @@ export async function getBurnStatusAtPoint(
   } else if (mostRecentYear === 2020) {
     score = 80;
     detailText = '2020 burn — recent, good morel potential.';
+  } else {
+    score = 30;
+    detailText = 'Older burn — low morel potential.';
   }
 
   return {

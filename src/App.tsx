@@ -46,6 +46,7 @@ export function App(): React.JSX.Element {
               label="Light"
             ></calcite-icon>
             <calcite-switch
+              checked={mode === "dark"}
               oncalciteSwitchChange={() => {
                 toggleTheme();
               }}

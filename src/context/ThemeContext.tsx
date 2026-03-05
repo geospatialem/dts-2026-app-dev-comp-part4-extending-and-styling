@@ -22,8 +22,18 @@ type ThemeActions = {
 const ThemeStateContext = createContext<ThemeState | null>(null);
 const ThemeActionsContext = createContext<ThemeActions | null>(null);
 
+function getInitialThemeMode(): ThemeMode {
+  if (typeof window === "undefined") {
+    return "light";
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
+
 export function ThemeProvider(props: PropsWithChildren): React.JSX.Element {
-  const [mode, setMode] = useState<ThemeMode>("light");
+  const [mode, setMode] = useState<ThemeMode>(getInitialThemeMode);
 
   const setLightTheme = useCallback(() => setMode("light"), []);
   const setDarkTheme = useCallback(() => setMode("dark"), []);

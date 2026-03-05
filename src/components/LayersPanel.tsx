@@ -24,7 +24,7 @@ export function LayersPanel(): React.JSX.Element {
     perimeterLayers.length > 0 ? getLayerColor(perimeterLayers[0]) : undefined;
 
   return (
-    <calcite-panel heading="Will I Find Morels? " className="panel-layers">
+    <calcite-panel heading="Will I Find Morels?" className="panel-layers">
       <calcite-notice slot="footer" open color="brand" kind="warning">
         <div slot="message">
           For illustration purposes only. Always follow local guidelines and

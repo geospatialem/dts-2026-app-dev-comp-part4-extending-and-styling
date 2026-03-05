@@ -8,7 +8,7 @@ Presented at the 2026 Esri Developer Summit by [Kitty Hurley](https://github.com
 
 ## Get started
 
-- `npm start` - Runs the app in development mode.
+- `npm run dev` - Runs the app in development mode.
 - `npm run build` - Builds the app for production to the `build` folder.
 - `npm run preview` - Builds the app and serves it locally for testing.
 

@@ -42,7 +42,6 @@ const darkBackgroundLayer = new VectorTileLayer({
 //   visible: true,
 // });
 
-
 type LayersState = {
   map: WebMap | null;
   featureLayers: FeatureLayer[];
@@ -250,7 +249,7 @@ export function LayersProvider(props: PropsWithChildren): React.JSX.Element {
       }
 
       const backgroundLayer = map.allLayers
-        .filter((layer) => layer.title === "Outdoor Without Roads and Labels")
+        .filter((layer) => layer.title === "Outdoor")
         .at(0);
 
       dispatch({
@@ -333,9 +332,14 @@ export function LayersProvider(props: PropsWithChildren): React.JSX.Element {
       handleViewReady,
       handleFireYearSelection,
       handleRoadTrailSelection,
-      toggleBackgroundLayer
+      toggleBackgroundLayer,
     }),
-    [handleViewReady, handleFireYearSelection, handleRoadTrailSelection, toggleBackgroundLayer],
+    [
+      handleViewReady,
+      handleFireYearSelection,
+      handleRoadTrailSelection,
+      toggleBackgroundLayer,
+    ],
   );
 
   return (
@@ -362,4 +366,3 @@ export function useLayersActions(): LayersActions {
   }
   return ctx;
 }
-

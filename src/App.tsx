@@ -9,9 +9,12 @@ import "@esri/calcite-components/components/calcite-icon";
 import "@esri/calcite-components/components/calcite-label";
 import "@esri/calcite-components/components/calcite-navigation";
 import "@esri/calcite-components/components/calcite-navigation-logo";
+import "@esri/calcite-components/components/calcite-notice";
 import "@esri/calcite-components/components/calcite-sheet";
 import "@esri/calcite-components/components/calcite-shell";
 import "@esri/calcite-components/components/calcite-switch";
+
+import { useEffect, useRef, useState } from "react";
 
 import { useLayersActions, useLayersState } from "./context/LayersContext";
 import { useResultsActions } from "./context/ResultsContext";
@@ -19,9 +22,8 @@ import { useThemeActions, useThemeState } from "./context/ThemeContext";
 import { useUIActions, useUIState } from "./context/UIContext";
 
 import { LayersPanel } from "./components/LayersPanel";
+import { Logo } from "./components/Logo";
 import { MorelPanel } from "./components/MorelPanel";
-import { useEffect } from "react";
-import { Logo } from "./components/logo";
 
 const mapItemId = "ecaf67baea484e99b1b499131ae8e179";
 
@@ -35,6 +37,13 @@ export function App(): React.JSX.Element {
   const { map } = useLayersState();
   const { mode } = useThemeState();
   const { toggleTheme } = useThemeActions();
+  const noticeRef = useRef<HTMLCalciteNoticeElement | null>(null);
+  const [noticeHeight, setNoticeHeight] = useState(0);
+
+  const mapOverlayBottomSpace = Math.max(noticeHeight, 68);
+  const mapStyle = {
+    "--arcgis-layout-overlay-space-bottom": `${mapOverlayBottomSpace}px`,
+  } as React.CSSProperties;
 
   useEffect(() => {
     // Set the initial background layer based on the theme mode when the app loads
@@ -42,6 +51,27 @@ export function App(): React.JSX.Element {
       toggleBackgroundLayer(mode);
     }
   }, [map, mode, toggleBackgroundLayer]);
+
+  useEffect(() => {
+    const noticeElement = noticeRef.current;
+
+    if (!noticeElement) {
+      return;
+    }
+
+    const updateNoticeHeight = () => {
+      setNoticeHeight(Math.ceil(noticeElement.getBoundingClientRect().height));
+    };
+
+    updateNoticeHeight();
+
+    const resizeObserver = new ResizeObserver(updateNoticeHeight);
+    resizeObserver.observe(noticeElement);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   return (
     // The Shell component is used as a layout for this template
@@ -103,6 +133,7 @@ export function App(): React.JSX.Element {
         onarcgisViewClick={handleMapClick}
         popup-disabled
         ground="world-elevation"
+        style={mapStyle}
       >
         {/* We'll use the map slots to position additional components */}
         {!isSmallScreen && (
@@ -115,6 +146,19 @@ export function App(): React.JSX.Element {
         <div slot="top-right">
           <MorelPanel />
         </div>
+        <calcite-notice
+          open
+          icon="flag"
+          kind="warning"
+          className="map-notice"
+          ref={noticeRef}
+        >
+          <div slot="title">Disclaimer</div>
+          <div slot="message">
+            This map is for entertainment purposes only. Do not rely on it for
+            navigation or safety decisions. DO NOT EAT WILD MUSHROOMS.
+          </div>
+        </calcite-notice>
       </arcgis-map>
       {isSmallScreen && (
         <calcite-sheet

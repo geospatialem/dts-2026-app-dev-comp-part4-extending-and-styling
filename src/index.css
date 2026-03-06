@@ -96,3 +96,16 @@ calcite-panel > calcite-block:not(.block-elevation) {
   white-space: nowrap;
   border: 0;
 }
+
+.map-notice {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+/** Change the bottom overlay space for the map **/
+arcgis-map {
+  --arcgis-layout-overlay-space-bottom: 68px;
+}
+

@@ -93,7 +93,7 @@ export function App(): React.JSX.Element {
       )}
             <calcite-sheet
         resizable
-        label="popup"
+        label="Morel details"
         open={isPopupOpen}
         slot="sheets"
         oncalciteSheetClose={handleFeaturesSheetClose}

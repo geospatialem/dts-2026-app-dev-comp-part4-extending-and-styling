@@ -8,6 +8,10 @@ body {
   margin: 0;
 }
 
+calcite-notice {
+  opacity: 0.95;
+}
+
 calcite-meter {
   width: 10rem;
 }

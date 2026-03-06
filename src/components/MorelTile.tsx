@@ -1,5 +1,6 @@
 import '@esri/calcite-components/components/calcite-meter';
 import '@esri/calcite-components/components/calcite-tile';
+import '@esri/calcite-components/components/calcite-button';
 
 import type React from 'react';
 
@@ -22,6 +23,11 @@ export type MorelTileProps = {
   bigNumber?: React.ReactNode;
   meter?: MorelTileMeterProps;
   contentTopExtra?: React.ReactNode;
+  action?: {
+    label: string;
+    onClick: () => void;
+    disabled?: boolean;
+  };
   children?: React.ReactNode;
 };
 
@@ -33,6 +39,7 @@ export function MorelTile({
   bigNumber,
   meter,
   contentTopExtra,
+  action,
   children,
 }: MorelTileProps): React.JSX.Element {
   return (
@@ -68,6 +75,19 @@ export function MorelTile({
 
       {contentTopExtra != null ? (
         <div slot="content-top">{contentTopExtra}</div>
+      ) : null}
+
+      {action ? (
+        <calcite-button
+          slot="content-bottom"
+          appearance="outline"
+          scale="s"
+          width="full"
+          disabled={action.disabled}
+          onClick={action.onClick}
+        >
+          {action.label}
+        </calcite-button>
       ) : null}
 
       {children}

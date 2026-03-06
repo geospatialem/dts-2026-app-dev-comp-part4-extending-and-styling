@@ -7,9 +7,9 @@ import { UIProvider } from './UIContext';
 export function AppProviders(props: PropsWithChildren): React.JSX.Element {
   return (
     <LayersProvider>
-      <ResultsProvider>
-        <UIProvider>{props.children}</UIProvider>
-      </ResultsProvider>
+        <UIProvider>
+          <ResultsProvider>{props.children}</ResultsProvider>
+        </UIProvider>
     </LayersProvider>
   );
 }

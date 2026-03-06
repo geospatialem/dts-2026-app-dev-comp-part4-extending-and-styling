@@ -4,7 +4,7 @@ import '@esri/calcite-components/components/calcite-tile';
 import '@esri/calcite-components/components/calcite-tile-group';
 import '@esri/calcite-components/components/calcite-meter';
 
-import { useResultsState } from '../context/ResultsContext';
+import { useResultsActions, useResultsState } from '../context/ResultsContext';
 import { MorelTile } from './MorelTile';
 import type { MorelTileProps } from './MorelTile';
 
@@ -22,7 +22,10 @@ export function MorelPanel(): React.JSX.Element {
     accessDetail,
     accessValue,
     locationLabel,
+    canInspectFeaturesAtLocation,
   } = useResultsState();
+
+  const { inspectFeaturesAtLocation } = useResultsActions();
 
   const resultsTiles: (MorelTileProps & { key: string })[] = [
     {
@@ -31,6 +34,11 @@ export function MorelPanel(): React.JSX.Element {
       description: 'Latitude and longitude of last map click.',
       heading: 'Location',
       bigNumber: locationLabel,
+      action: {
+        label: 'Inspect features at location',
+        onClick: inspectFeaturesAtLocation,
+        disabled: !canInspectFeaturesAtLocation,
+      },
     },
     {
       key: 'burn',
@@ -56,7 +64,9 @@ export function MorelPanel(): React.JSX.Element {
           : 'Click the map to see elevation.',
       heading: 'Elevation',
       bigNumber:
-        elevationValue !== null ? `${Math.round(elevationValue)} m` : 'Tap map',
+        elevationValue !== null
+          ? `${Math.round(elevationValue)} ft`
+          : 'Tap map',
       meter: {
         label: 'Elevation',
         min: 0,

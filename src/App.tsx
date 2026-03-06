@@ -1,5 +1,6 @@
 // Individual imports for each Map, Chart and Calcite component
 import '@arcgis/map-components/components/arcgis-map';
+import '@arcgis/map-components/components/arcgis-elevation-profile';
 import '@arcgis/map-components/components/arcgis-zoom';
 import '@esri/calcite-components/components/calcite-shell';
 import '@esri/calcite-components/components/calcite-navigation';
@@ -18,9 +19,11 @@ const mapItemId = 'ecaf67baea484e99b1b499131ae8e179';
 
 export function App(): React.JSX.Element {
   const { handleViewReady } = useLayersActions();
-  const { handleMapClick } = useResultsActions();
-  const { isSmallScreen, isFiltersSheetOpen } = useUIState();
-  const { openFilters, closeFilters } = useUIActions();
+  const { handleMapClick, registerElevationProfileElement } =
+    useResultsActions();
+  const { isSmallScreen, isFiltersSheetOpen, isPopupOpen } = useUIState();
+  const { openFilters, closeFilters, handleFeaturesSheetClose } =
+    useUIActions();
 
   return (
     // The Shell component is used as a layout for this template
@@ -42,11 +45,29 @@ export function App(): React.JSX.Element {
           ></calcite-action>
         )}
       </calcite-navigation>
-      {/* The Map component fits to the size of the parent element  */}
+              {/* Hidden elevation-profile component used for elevation sampling on click. */}
+        <arcgis-elevation-profile
+          className="elevation-profile-hidden"
+          referenceElement="morel-map"
+          distanceUnit="imperial"
+          elevationUnit="imperial"
+          slot="bottom-right"
+          hideChart
+          hideLegend
+          hideSettingsButton
+          hideSelectButton
+          hideStartButton
+          hideClearButton
+          hideVisualization
+          ref={registerElevationProfileElement}
+        ></arcgis-elevation-profile>
       <arcgis-map
+        id="morel-map"
         item-id={mapItemId}
         onarcgisViewReadyChange={handleViewReady}
         onarcgisViewClick={handleMapClick}
+                popup-disabled
+        ground="world-elevation"
       >
         {/* We'll use the map slots to position additional components */}
         {!isSmallScreen && (
@@ -70,6 +91,22 @@ export function App(): React.JSX.Element {
           <LayersPanel />
         </calcite-sheet>
       )}
+            <calcite-sheet
+        resizable
+        label="popup"
+        open={isPopupOpen}
+        slot="sheets"
+        oncalciteSheetClose={handleFeaturesSheetClose}
+      >
+        <calcite-panel heading="Morel Details 🍄" className="popup-panel">
+          <div className="popup-content" id="popup-content">
+            <arcgis-features
+              referenceElement="morel-map"
+              hideCloseButton
+            ></arcgis-features>
+          </div>
+        </calcite-panel>
+      </calcite-sheet>
     </calcite-shell>
   );
 }

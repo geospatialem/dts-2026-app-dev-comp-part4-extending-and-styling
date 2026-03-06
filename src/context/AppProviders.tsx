@@ -9,9 +9,9 @@ export function AppProviders(props: PropsWithChildren): React.JSX.Element {
   return (
     <ThemeProvider>
       <LayersProvider>
-        <ResultsProvider>
-          <UIProvider>{props.children}</UIProvider>
-        </ResultsProvider>
+          <UIProvider>
+            <ResultsProvider>{props.children}</ResultsProvider>
+          </UIProvider>
       </LayersProvider>
     </ThemeProvider>
   );

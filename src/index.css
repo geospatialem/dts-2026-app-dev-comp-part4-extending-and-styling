@@ -62,3 +62,28 @@ calcite-panel > calcite-block:not(.block-elevation) {
   /* trick to remove extra space between calcite-label and calcite-input */
   --calcite-label-margin-bottom: 0;
 }
+.unstyled-shell {
+  position: unset;
+  inset: unset;
+  display: unset;
+  block-size: unset;
+  inline-size: unset;
+}
+
+.popup-content {
+  /** constrain height of arcgis-features to container */
+  display: flex;
+  max-height: 100%;
+}
+
+.elevation-profile-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -21,6 +21,7 @@ import { useUIActions, useUIState } from "./context/UIContext";
 import { LayersPanel } from "./components/LayersPanel";
 import { MorelPanel } from "./components/MorelPanel";
 import { useEffect } from "react";
+import { Logo } from "./components/logo";
 
 const mapItemId = "ecaf67baea484e99b1b499131ae8e179";
 
@@ -47,11 +48,14 @@ export function App(): React.JSX.Element {
     <calcite-shell content-behind className={`calcite-mode-${mode}`}>
       <calcite-navigation slot="header">
         {/* Heading and description dynamically populated */}
-        <calcite-navigation-logo
-          heading="Morel of the Story"
-          description="Potential gathering spots"
-          slot="logo"
-        ></calcite-navigation-logo>
+        <div slot="logo" className="nav-logo">
+          <Logo />
+          <calcite-navigation-logo
+            heading="Morel of the Story"
+            description="Potential gathering spots"
+          ></calcite-navigation-logo>
+        </div>
+
         <div slot="content-end" className="tool-group">
           <calcite-label layout="inline">
             <calcite-icon

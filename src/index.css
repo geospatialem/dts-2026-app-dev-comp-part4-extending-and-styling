@@ -26,8 +26,15 @@ calcite-tile {
 calcite-panel > calcite-block:not(.block-elevation) {
   --calcite-block-content-space: 0;
 }
+
 .block-elevation {
   --calcite-block-content-space: 0;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .panel-morel {

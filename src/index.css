@@ -59,4 +59,6 @@ calcite-panel > calcite-block:not(.block-elevation) {
 
 .tool-group {
   padding: 0.5rem;
+  /* trick to remove extra space between calcite-label and calcite-input */
+  --calcite-label-margin-bottom: 0;
 }

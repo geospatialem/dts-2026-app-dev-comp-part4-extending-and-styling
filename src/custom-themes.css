@@ -1,0 +1,144 @@
+body {
+  .calcite-mode-light {
+    --calcite-color-transparent-inverse-press: rgba(255, 255, 255, 0.18);
+    --calcite-color-transparent-inverse-hover: rgba(255, 255, 255, 0.14);
+    --calcite-color-transparent-tint: rgba(255, 255, 255, 0.82);
+    --calcite-color-transparent-scrim: rgba(247, 244, 236, 0.9);
+    --calcite-color-transparent-press: rgba(0, 0, 0, 0.06);
+    --calcite-color-transparent-hover: rgba(0, 0, 0, 0.03);
+    --calcite-color-transparent: rgba(0, 0, 0, 0);
+
+    /* Brand — Moss */
+    --calcite-color-brand: #4f6f3c;
+    --calcite-color-brand-hover: #3f5c30;
+    --calcite-color-brand-press: #2f4423;
+    --calcite-color-brand-underline: rgba(79, 111, 60, 0.35);
+
+    /* Status */
+    --calcite-color-status-success: #2f5e2f;
+    --calcite-color-status-success-hover: #264d26;
+    --calcite-color-status-success-press: #1c3a1c;
+
+    --calcite-color-status-warning: #b07a1a;
+    --calcite-color-status-warning-hover: #946614;
+    --calcite-color-status-warning-press: #6f4c0f;
+
+    --calcite-color-status-danger: #b93a2f; /* works with fire overlays */
+    --calcite-color-status-danger-hover: #9e3026;
+    --calcite-color-status-danger-press: #74231c;
+
+    --calcite-color-status-info: #4b7c8f;
+    --calcite-color-status-info-hover: #3d6676;
+    --calcite-color-status-info-press: #2c4b57;
+
+    /* Backgrounds — parchment */
+    --calcite-color-background: #f4f1e6;
+    --calcite-color-background-none: rgba(255, 255, 255, 0);
+
+    --calcite-color-surface-1: #f4f1e6;
+    --calcite-color-surface-2: #fbf8ef;
+    --calcite-color-surface-3: #f0ecd9;
+    --calcite-color-surface-4: #e8e3cd;
+    --calcite-color-surface-highlight: #e2eddc;
+
+    /* Foregrounds — soft sage */
+    --calcite-color-foreground-1: #f0f5ec;
+    --calcite-color-foreground-2: #e6efe0;
+    --calcite-color-foreground-3: #dbe6d4;
+    --calcite-color-foreground-current: #cfe0c6;
+
+    /* Text — bark tones */
+    --calcite-color-text-1: #2b2a26;
+    --calcite-color-text-2: #4a4a42;
+    --calcite-color-text-3: #6e6d63;
+    --calcite-color-text-link: var(--calcite-color-brand);
+    --calcite-color-text-highlight: #3f5c30;
+    --calcite-color-text-inverse: #ffffff;
+
+    /* Borders — warm neutral */
+    --calcite-color-border-1: #d8d3bf;
+    --calcite-color-border-2: #e5dfc9;
+    --calcite-color-border-3: #efe9d6;
+    --calcite-color-border-input: #a9a48f;
+    --calcite-color-border-white: #ffffff;
+    --calcite-color-border-ghost: rgba(80, 75, 60, 0.25);
+
+    /* Inverse */
+    --calcite-color-inverse: #2e2d27;
+    --calcite-color-inverse-hover: #24231e;
+    --calcite-color-inverse-press: #1a1915;
+
+    --calcite-color-focus: var(--calcite-color-brand);
+  }
+  .calcite-mode-dark {
+    --calcite-color-transparent-inverse-press: rgba(0, 0, 0, 0.1);
+    --calcite-color-transparent-inverse-hover: rgba(0, 0, 0, 0.06);
+    --calcite-color-transparent-tint: rgba(28, 36, 28, 0.85);
+    --calcite-color-transparent-scrim: rgba(0, 0, 0, 0.88);
+    --calcite-color-transparent-press: rgba(255, 255, 255, 0.14);
+    --calcite-color-transparent-hover: rgba(255, 255, 255, 0.1);
+    --calcite-color-transparent: rgba(255, 255, 255, 0);
+
+    /* Brand — brighter moss */
+    --calcite-color-brand: #7ea05a;
+    --calcite-color-brand-hover: #92b86a;
+    --calcite-color-brand-press: #5f7d42;
+    --calcite-color-brand-underline: rgba(126, 160, 90, 0.4);
+
+    /* Status */
+    --calcite-color-status-success: #6fb46f;
+    --calcite-color-status-success-hover: #86c986;
+    --calcite-color-status-success-press: #4d8b4d;
+
+    --calcite-color-status-warning: #d8a94b;
+    --calcite-color-status-warning-hover: #e5bc6b;
+    --calcite-color-status-warning-press: #b78633;
+
+    --calcite-color-status-danger: #ff6b5a;
+    --calcite-color-status-danger-hover: #ff8b7c;
+    --calcite-color-status-danger-press: #d94a3a;
+
+    --calcite-color-status-info: #6aa6bd;
+    --calcite-color-status-info-hover: #83bdd3;
+    --calcite-color-status-info-press: #4f7f93;
+
+    /* Background — deep forest */
+    --calcite-color-background: #1c221a;
+    --calcite-color-background-none: rgba(255, 255, 255, 0);
+
+    --calcite-color-surface-1: #1c221a;
+    --calcite-color-surface-2: #232a20;
+    --calcite-color-surface-3: #2a3226;
+    --calcite-color-surface-4: #30382c;
+    --calcite-color-surface-highlight: #344233;
+
+    /* Foregrounds */
+    --calcite-color-foreground-1: #232a20;
+    --calcite-color-foreground-2: #2a3226;
+    --calcite-color-foreground-3: #30382c;
+    --calcite-color-foreground-current: #3a4a38;
+
+    /* Text */
+    --calcite-color-text-1: #ffffff;
+    --calcite-color-text-2: #d3d8cd;
+    --calcite-color-text-3: #9ea79a;
+    --calcite-color-text-link: var(--calcite-color-brand);
+    --calcite-color-text-highlight: #a9d18e;
+    --calcite-color-text-inverse: #1c221a;
+
+    /* Borders */
+    --calcite-color-border-1: #3a4335;
+    --calcite-color-border-2: #30382c;
+    --calcite-color-border-3: #262d22;
+    --calcite-color-border-input: #56624e;
+    --calcite-color-border-white: #2a3226;
+    --calcite-color-border-ghost: rgba(150, 165, 140, 0.25);
+
+    /* Inverse */
+    --calcite-color-inverse: #f4f1e6;
+    --calcite-color-inverse-hover: #ffffff;
+    --calcite-color-inverse-press: #e8e3cd;
+
+    --calcite-color-focus: var(--calcite-color-brand);
+  }
+}

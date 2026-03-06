@@ -1,15 +1,14 @@
-import '@esri/calcite-components/components/calcite-panel';
-import '@esri/calcite-components/components/calcite-list';
-import '@esri/calcite-components/components/calcite-list-item';
-import '@esri/calcite-components/components/calcite-notice';
-import '@esri/calcite-components/components/calcite-block';
-import '@esri/calcite-components/components/calcite-shell';
-import '@esri/calcite-components/components/calcite-sheet';
-import '@esri/calcite-components/components/calcite-slider';
-import '@arcgis/map-components/components/arcgis-features';
+import "@esri/calcite-components/components/calcite-block";
+import "@esri/calcite-components/components/calcite-label";
+import "@esri/calcite-components/components/calcite-list";
+import "@esri/calcite-components/components/calcite-list-item";
+import "@esri/calcite-components/components/calcite-notice";
+import "@esri/calcite-components/components/calcite-panel";
+import "@esri/calcite-components/components/calcite-shell";
+import "@esri/calcite-components/components/calcite-slider";
 
-import { getLayerColor } from '../utils/mapUtils';
-import { useLayersActions, useLayersState } from '../context/LayersContext';
+import { useLayersActions, useLayersState } from "../context/LayersContext";
+import { getLayerColor } from "../utils/mapUtils";
 
 export function LayersPanel(): React.JSX.Element {
   const {
@@ -62,9 +61,9 @@ export function LayersPanel(): React.JSX.Element {
                     <div
                       slot="content-end"
                       style={{
-                        width: '1rem',
-                        height: '1rem',
-                        borderRadius: '999px',
+                        width: "1rem",
+                        height: "1rem",
+                        borderRadius: "999px",
                         backgroundColor: perimeterColor,
                       }}
                     ></div>
@@ -102,7 +101,7 @@ export function LayersPanel(): React.JSX.Element {
                 return (
                   <calcite-list-item
                     key={layer.id}
-                    label={layer.title ?? 'USFS layer'}
+                    label={layer.title ?? "USFS layer"}
                     scale="s"
                     value={layer.id}
                     selected={activeRoadTrailLayerIds.includes(layer.id)}
@@ -112,9 +111,9 @@ export function LayersPanel(): React.JSX.Element {
                       <div
                         slot="content-end"
                         style={{
-                          width: '1rem',
-                          height: '1rem',
-                          borderRadius: '999px',
+                          width: "1rem",
+                          height: "1rem",
+                          borderRadius: "999px",
                           opacity: activeRoadTrailLayerIds.includes(layer.id)
                             ? 1
                             : 0.5,
@@ -132,3 +131,4 @@ export function LayersPanel(): React.JSX.Element {
     </calcite-panel>
   );
 }
+

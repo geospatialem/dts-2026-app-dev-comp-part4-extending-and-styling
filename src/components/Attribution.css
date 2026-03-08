@@ -1,0 +1,8 @@
+.attribution {
+  display: flex;
+}
+
+.attribution-content {
+  padding: var(--calcite-space-xs);
+  max-width: 80vw;
+}

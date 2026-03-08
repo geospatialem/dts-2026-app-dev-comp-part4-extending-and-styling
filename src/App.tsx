@@ -24,6 +24,7 @@ import { useUIActions, useUIState } from "./context/UIContext";
 import { LayersPanel } from "./components/LayersPanel";
 import { Logo } from "./components/Logo";
 import { MorelPanel } from "./components/MorelPanel";
+import { Attribution } from "./components/Attribution";
 
 const mapItemId = "c5d76336253648c0af8da33ecf40c7af";
 
@@ -129,6 +130,7 @@ export function App(): React.JSX.Element {
       <arcgis-map
         id="morel-map"
         item-id={mapItemId}
+        hideAttribution
         onarcgisViewReadyChange={handleViewReady}
         onarcgisViewClick={handleMapClick}
         popup-disabled
@@ -146,6 +148,7 @@ export function App(): React.JSX.Element {
         <div slot="top-right">
           <MorelPanel />
         </div>
+        <Attribution slot="bottom-left" />
         <calcite-notice
           open
           icon="flag"

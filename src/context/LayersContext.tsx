@@ -21,6 +21,7 @@ import type FeatureLayer from "@arcgis/core/layers/FeatureLayer.js";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 import VectorTileLayer from "@arcgis/core/layers/VectorTileLayer";
 import type GroupLayer from "@arcgis/core/layers/GroupLayer";
+import { watch } from "@arcgis/core/core/reactiveUtils";
 
 const FIREYEARS = [2025, 2024, 2023, 2022, 2021, 2020] as const;
 
@@ -44,6 +45,7 @@ const darkBackgroundLayer = new VectorTileLayer({
 
 type LayersState = {
   map: WebMap | null;
+  attributionItems?: string[];
   featureLayers: FeatureLayer[];
   backgroundLayer: VectorTileLayer | null;
   activeFireYears: number[];
@@ -62,6 +64,7 @@ type LayersAction =
       clickPinLayer: GraphicsLayer;
       selectedTrailRouteLayer: GraphicsLayer;
     }
+  | { type: "setAttributionItems"; attributionItems: string[] }
   | { type: "setBackgroundLayer"; layer: VectorTileLayer }
   | { type: "toggleBackgroundLayer"; mode: "light" | "dark" }
   | { type: "toggleFireYear"; year: number }
@@ -75,6 +78,7 @@ const initialState: LayersState = {
   activeRoadTrailLayerIds: [],
   clickPinLayer: null,
   selectedTrailRouteLayer: null,
+  attributionItems: [],
 };
 
 function layersReducer(state: LayersState, action: LayersAction): LayersState {
@@ -88,6 +92,12 @@ function layersReducer(state: LayersState, action: LayersAction): LayersState {
         activeRoadTrailLayerIds: action.initialRoadTrailLayerIds,
         clickPinLayer: action.clickPinLayer,
         selectedTrailRouteLayer: action.selectedTrailRouteLayer,
+      };
+    }
+    case "setAttributionItems": {
+      return {
+        ...state,
+        attributionItems: action.attributionItems,
       };
     }
     case "toggleFireYear": {
@@ -251,6 +261,18 @@ export function LayersProvider(props: PropsWithChildren): React.JSX.Element {
       const backgroundLayer = map.allLayers
         .filter((layer) => layer.title === "Outdoor")
         .at(0);
+      let attributionItems: string[] = [];
+      const handler = watch(
+        () => viewElement.updating,
+        (updating) => {
+          if (!updating) {
+            const items = viewElement.attributionItems;
+            attributionItems = items.map((item) => item.text);
+            dispatch({ type: "setAttributionItems", attributionItems });
+            handler.remove();
+          }
+        },
+      );
 
       dispatch({
         type: "viewReadyLoadedLayers",

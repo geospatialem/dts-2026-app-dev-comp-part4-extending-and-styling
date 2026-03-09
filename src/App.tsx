@@ -99,6 +99,8 @@ export function App(): React.JSX.Element {
         onarcgisViewClick={handleMapClick}
         popup-disabled
         ground="world-elevation"
+        // Set the attribution mode based on the current theme
+        attributionMode={mode}
       >
         {/* We'll use the map slots to position additional components */}
         {!isSmallScreen && (

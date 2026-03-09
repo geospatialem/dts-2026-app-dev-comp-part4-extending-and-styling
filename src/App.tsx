@@ -22,7 +22,7 @@ import { LayersPanel } from "./components/LayersPanel";
 import { MorelPanel } from "./components/MorelPanel";
 import { useEffect } from "react";
 
-const mapItemId = "ecaf67baea484e99b1b499131ae8e179";
+const mapItemId = "c5d76336253648c0af8da33ecf40c7af";
 
 export function App(): React.JSX.Element {
   const { handleViewReady, toggleBackgroundLayer } = useLayersActions();

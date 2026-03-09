@@ -136,6 +136,8 @@ export function App(): React.JSX.Element {
         popup-disabled
         ground="world-elevation"
         style={mapStyle}
+        // Set the attribution mode based on the current theme
+        attributionMode={mode}
       >
         {/* We'll use the map slots to position additional components */}
         {!isSmallScreen && (

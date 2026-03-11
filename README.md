@@ -6,6 +6,13 @@ Presented at the 2026 Esri Developer Summit by [Kitty Hurley](https://github.com
 - [Code](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling)
 - _Slides, will be posted at a later time_
 
+## Branches
+
+- [`main`](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling): Base application
+- [`rr/modes`](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling/tree/rr/modes): Switching Calcite modes
+- [`rr/modes-basemaps`](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling/tree/rr/modes-basemaps): Switching basemaps when switching Calcite modes
+- [`rr/app-customize`](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling/tree/rr/app-customize): Finished application. Custom design tokens, logo, and custom attribution
+
 ## Get started
 
 - `npm run dev` - Runs the app in development mode.

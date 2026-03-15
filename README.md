@@ -24,10 +24,6 @@ This template uses the following packages:
 - [`@arcgis/charts-components`](https://www.npmjs.com/package/@arcgis/charts-components)
 - [`@esri/calcite-components`](https://www.npmjs.com/package/@esri/calcite-components)
 
-## Demos
-
-_Coming soon_
-
 ## Resources
 
 - [Calcite design token usage](https://developers.arcgis.com/calcite-design-system/foundations/tokens/usage)

@@ -2,9 +2,10 @@
 
 Presented at the 2026 Esri Developer Summit by [Kitty Hurley](https://github.com/geospatialem) and [Rene Rubalcava](https://github.com/odoe) in Palm Springs, California.
 
-- <a href="arcgis-maps-sdk-js-app-dev-with-components-part-4-extending-and-styling.pdf" target="_blank">Slides</a>, opens in a new window
+- <a href="arcgis-maps-sdk-js-app-dev-with-components-part-4-extending-and-styling.pdf" target="_blank" rel="noopener noreferrer">Slides</a>, opens in a new window
+- <a href="https://registration.esri.com/flow/esri/26epcdev/deveventportal/page/detailed-agenda/session/1761122138829001Iinc" target="_blank" rel="noopener noreferrer">Recording</a>, opens in a new window
 
-This session was the final presentation as part of a 4 part series. To visit the other 3 presentations in the series, visit:
+This session was the final presentation as part of a 4 part series. To explore the other 3 presentations in the series, visit:
 
 - [Part 1: Programming Patterns](https://github.com/ycabon/presentations/tree/gh-pages/2026-devsummit/app-development-with-components-part1)
 - [Part 2: Using Frameworks](https://github.com/maxpatiiuk/esri-dev-summit-presentations/tree/main/2026/using-components-2)
@@ -17,7 +18,7 @@ This session was the final presentation as part of a 4 part series. To visit the
 - [`rr/modes-basemaps`](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling/tree/rr/modes-basemaps): Switching basemaps when switching Calcite modes
 - [`rr/app-customize`](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling/tree/rr/app-customize): Finished application. Custom design tokens, logo, and custom attribution
 
-## Get started
+## Getting started
 
 - `npm run dev` - Runs the app in development mode.
 - `npm run build` - Builds the app for production to the `build` folder.

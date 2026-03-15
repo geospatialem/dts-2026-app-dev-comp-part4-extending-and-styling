@@ -4,6 +4,12 @@ Presented at the 2026 Esri Developer Summit by [Kitty Hurley](https://github.com
 
 - <a href="arcgis-maps-sdk-js-app-dev-with-components-part-4-extending-and-styling.pdf" target="_blank">Slides</a>, opens in a new window
 
+This session was the final presentation as part of a 4 part series. To visit the other 3 presentations in the series, visit:
+
+- [Part 1: Programming Patterns](https://github.com/ycabon/presentations/tree/gh-pages/2026-devsummit/app-development-with-components-part1)
+- [Part 2: Using Frameworks](https://github.com/maxpatiiuk/esri-dev-summit-presentations/tree/main/2026/using-components-2)
+- [Part 3: User Experience](https://github.com/nick-romano/esri-dev-summit-presentations-2026)
+
 ## Branches
 
 - [`main`](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling): Base application

@@ -2,9 +2,7 @@
 
 Presented at the 2026 Esri Developer Summit by [Kitty Hurley](https://github.com/geospatialem) and [Rene Rubalcava](https://github.com/odoe) in Palm Springs, California.
 
-- [Demo Site](https://geospatialem.github.io/dts-2026-app-dev-comp-part4-extending-and-styling)
-- [Code](https://github.com/geospatialem/dts-2026-app-dev-comp-part4-extending-and-styling)
-- _Slides, will be posted at a later time_
+- <a href="arcgis-maps-sdk-js-app-dev-with-components-part-4-extending-and-styling.pdf" target="_blank">Slides</a>, opens in a new window
 
 ## Branches
 
